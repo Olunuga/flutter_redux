@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_redux_app/Redux/AuthenticationRdx/AuthActions.dart';
+import 'package:flutter_redux_app/Redux/ResourceMiddleware.dart';
 import 'package:flutter_redux_app/Redux/CounterRdx/CounterActions.dart';
+import 'package:flutter_redux_app/Resources/Api/ApiManager.dart';
+import 'package:flutter_redux_app/Resources/Api/AuthApi.dart';
+import 'package:flutter_redux_app/Resources/Api/MovieApi.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux_app/Redux/AppRdx.dart';
 
@@ -9,12 +14,15 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
-  final Store<AppState> store =
-      new Store(appReducer, initialState: new AppState.initial());
+  final Store<AppState> store = new Store(appReducer,
+      initialState: new AppState.initial(),
+      middleware: [
+        ResourceMiddleware(apiManager: ApiManager(AuthApi(), MovieApi()))
+      ]);
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider(
+    return StoreProvider<AppState>(
         store: store,
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -60,6 +68,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
+            FlatButton(
+              child: Text("Simulate Login"),
+              onPressed: () {
+                widget.store
+                    .dispatch(LoginAction(data: {"username": "mayowa"}));
+              },
+            ),
             StoreConnector<AppState, int>(
               converter: (store) => store.state.counterState.count,
               builder: (context, count) {
@@ -68,7 +83,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: Theme.of(context).textTheme.display1,
                 );
               },
-            )
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              height: 80,
+              width: 80,
+              child: StoreConnector<AppState, bool>(
+                  converter: (store) => store.state.authState.loginLoading,
+                  builder: (context, status) {
+                    return status ? CircularProgressIndicator() : Container();
+                  }),
+            ),
           ],
         ),
       ),

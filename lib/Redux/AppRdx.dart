@@ -6,13 +6,10 @@ import 'package:flutter_redux_app/Redux/CounterRdx/CounterReducer.dart';
 import 'package:flutter_redux_app/Redux/MovieRdx/MovieReducer.dart';
 import 'package:flutter_redux_app/Redux/MovieRdx/MovieState.dart';
 
+//State
 class AppState {
-  //Auth
   final AuthState authState;
-  //movie
   final MovieState movieState;
-
-  //counter basic test to see it work;
   final CounterState counterState;
 
   AppState(this.authState, this.movieState, this.counterState);
@@ -20,22 +17,20 @@ class AppState {
       AuthState.initial(), MovieState.initial(), CounterState.initial());
 }
 
+//Action
 abstract class AppAction {
   String toString() {
     return '$runtimeType';
   }
 }
 
+//Reducer
 AppState appReducer(dynamic state, dynamic action) {
   return new AppState(
       //Auth reducers, most apps have auth, so this is supposed to be generic
       authReducer(state.authState, action), //Auth
 
       //other reducers comes in here.
-
-      //movies
       movieReducer(state.movieState, action),
-
-      //counter
       counterReducer(state.counterState, action));
 }
