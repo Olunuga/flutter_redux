@@ -1,23 +1,26 @@
 import 'package:flutter_redux_app/Redux/AppRdx.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_redux_app/Resources/Api/Response.dart';
+import 'package:flutter_redux_app/Resources/Api/RequestModel'
+    '/LoginRequestModel.dart';
+import 'package:flutter_redux_app/Resources/Api/ResponseModel/LoginResponseModel.dart';
+import 'package:flutter_redux_app/Resources/Api/ResponseModel/ResponseModel.dart';
 
 abstract class AuthAction extends AppAction {}
 
 ///*********   Login ****************
 class LoginAction extends AuthAction {
-  final Map data;
+  final LoginRequestModel data;
   LoginAction({@required this.data});
 }
 
 class LoginSuccessfulAction extends AuthAction {
-  final Response response;
+  final LoginResponseModel response;
   LoginSuccessfulAction({@required this.response});
 }
 
 class LoginFailedAction extends AuthAction {
-  final Response response;
-  LoginFailedAction({@required this.response});
+  final String message;
+  LoginFailedAction({@required this.message});
 }
 
 class LoginLoadingAction extends AuthAction {
