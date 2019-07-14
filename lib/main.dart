@@ -3,9 +3,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_redux_app/Redux/AuthenticationRdx/AuthActions.dart';
 import 'package:flutter_redux_app/Redux/ResourceMiddleware.dart';
 import 'package:flutter_redux_app/Redux/CounterRdx/CounterActions.dart';
-import 'package:flutter_redux_app/Resources/Api/ApiManager.dart';
-import 'package:flutter_redux_app/Resources/Api/AuthApi.dart';
-import 'package:flutter_redux_app/Resources/Api/MovieApi.dart';
+import 'package:flutter_redux_app/Resources/Api/Api.dart';
+import 'package:flutter_redux_app/Resources/Api/RequestModel/LoginRequestModel.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux_app/Redux/AppRdx.dart';
 
@@ -16,9 +15,7 @@ class MyApp extends StatelessWidget {
 
   final Store<AppState> store = new Store(appReducer,
       initialState: new AppState.initial(),
-      middleware: [
-        ResourceMiddleware(apiManager: ApiManager(AuthApi(), MovieApi()))
-      ]);
+      middleware: [ResourceMiddleware(api: Api())]);
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +68,11 @@ class _MyHomePageState extends State<MyHomePage> {
             FlatButton(
               child: Text("Simulate Login"),
               onPressed: () {
-                widget.store
-                    .dispatch(LoginAction(data: {"username": "mayowa"}));
+                widget.store.dispatch(LoginAction(
+                    data: LoginRequestModel(
+                        username: ""
+                            "myorh",
+                        password: "olunuga")));
               },
             ),
             StoreConnector<AppState, int>(
